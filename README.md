@@ -1,6 +1,5 @@
  PacMan
 ===
----
 
 ## A game coded fully in Java. Using Swing.
 
