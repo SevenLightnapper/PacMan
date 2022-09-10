@@ -1,4 +1,7 @@
-package com.game.pacman;
+package com.game.pacman.utils;
+
+import com.game.pacman.general.PacWindow;
+import com.game.pacman.map.MapEditor;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -90,7 +93,6 @@ public class StartWindow extends JFrame {
         customButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: add game customization
                 MapEditor me = new MapEditor();
                 dispose();
             }
@@ -105,7 +107,7 @@ public class StartWindow extends JFrame {
 
         // console output
         System.out.print('\n');
-        System.out.println("PacMan v1.0.0   Developed By : SevenLightnapper");
+        System.out.println("PacMan v1.0.5   Developed By : SevenLightnapper");
         System.out.println("-----------------------------------------------");
 
         // make the starting window visible

@@ -1,5 +1,6 @@
-package com.game.pacman;
+package com.game.pacman.utils;
 
+import com.game.pacman.general.PacBoard;
 import com.game.pacman.map.MoveType;
 
 import java.awt.Point;
@@ -22,11 +23,11 @@ public class BFSFinder {
         this.my = pb.m_y;
         //init BFS map
         map = new int[pb.m_x][pb.m_y];
-        for(int ii=0;ii<pb.m_y;ii++){
-            for(int jj=0;jj<pb.m_x;jj++){
-                if(pb.map[jj][ii]>0 && pb.map[jj][ii]<26){
+        for (int ii = 0; ii < pb.m_y; ii++) {
+            for (int jj=0; jj<pb.m_x; jj++) {
+                if (pb.map[jj][ii] > 0 && pb.map[jj][ii] < 26) {
                     map[jj][ii] = 1;
-                }else{
+                } else {
                     map[jj][ii] = 0;
                 }
             }
@@ -50,14 +51,14 @@ public class BFSFinder {
     }
 
     private boolean isValid(int i,int j,boolean[][] markMat) {
-        return (i>=0 && i<mx && j>=0 && j<my && map[i][j]==0 && !markMat[i][j]);
+        return (i >= 0 && i < mx && j >= 0 && j < my && map[i][j] == 0 && !markMat[i][j]);
     }
 
     //Construct Parentship LinkedList
     public MoveType getMove(int x, int y,int tx,int ty) {
 
         //already reached
-        if(x==tx && y==ty){
+        if (x == tx && y == ty) {
             return MoveType.NONE;
         }
 

@@ -1,4 +1,4 @@
-package com.game.pacman;
+package com.game.pacman.utils;
 
 import javax.swing.JLabel;
 import java.awt.Color;
