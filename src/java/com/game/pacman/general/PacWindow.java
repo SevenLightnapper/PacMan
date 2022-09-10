@@ -1,6 +1,7 @@
-package com.game.pacman;
+package com.game.pacman.general;
 
 import com.game.pacman.map.MapData;
+import com.game.pacman.map.MapEditor;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +16,7 @@ import java.util.Scanner;
 public class PacWindow extends JFrame {
 
     public PacWindow(){
-        setTitle("PacMan v1.0.0");
+        setTitle("PacMan v1.0.5");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         getContentPane().setBackground(Color.black);
@@ -57,7 +58,7 @@ public class PacWindow extends JFrame {
     }
 
     public PacWindow(MapData md){
-        setTitle("PacMan v1.0.0");
+        setTitle("PacMan v1.0.5");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         getContentPane().setBackground(Color.black);

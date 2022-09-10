@@ -1,11 +1,18 @@
-package com.game.pacman;
+package com.game.pacman.general;
 
 import com.game.pacman.map.MapData;
 import com.game.pacman.map.instances.food.Food;
 import com.game.pacman.map.instances.food.PowerUpFood;
 import com.game.pacman.map.instances.ghost.Ghost;
 import com.game.pacman.map.instances.ghost.GhostData;
+import com.game.pacman.map.instances.ghost.types.CyanGhost;
+import com.game.pacman.map.instances.ghost.types.PinkGhost;
+import com.game.pacman.map.instances.ghost.types.RedGhost;
 import com.game.pacman.map.instances.teleport.TeleportTunnel;
+import com.game.pacman.utils.ImageHelper;
+import com.game.pacman.utils.LoopPlayer;
+import com.game.pacman.utils.AWTEventStatusMessage;
+import com.game.pacman.utils.SoundPlayer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
@@ -25,45 +32,45 @@ import java.util.ArrayList;
 public class PacBoard extends JPanel{
 
 
-    Timer redrawTimer;
-    ActionListener redrawAL;
+    protected Timer redrawTimer;
+    protected ActionListener redrawAL;
 
-    int[][] map;
-    Image[] mapSegments;
+    public int[][] map;
+    protected Image[] mapSegments;
 
-    Image foodImage;
-    Image[] pfoodImage;
+    private Image foodImage;
+    protected Image[] pfoodImage;
 
-    Image goImage;
-    Image vicImage;
+    private Image goImage;
+    private Image vicImage;
 
-    Pacman pacman;
-    ArrayList<Food> foods;
-    ArrayList<PowerUpFood> pufoods;
-    ArrayList<Ghost> ghosts;
-    ArrayList<TeleportTunnel> teleports;
+    public Pacman pacman;
+    private ArrayList<Food> foods;
+    private ArrayList<PowerUpFood> pufoods;
+    private ArrayList<Ghost> ghosts;
+    private ArrayList<TeleportTunnel> teleports;
 
-    boolean isCustom = false;
-    boolean isGameOver = false;
-    boolean isWin = false;
-    boolean drawScore = false;
-    boolean clearScore = false;
-    int scoreToAdd = 0;
+    protected boolean isCustom = false;
+    private boolean isGameOver = false;
+    private boolean isWin = false;
+    private boolean drawScore = false;
+    private boolean clearScore = false;
+    private int scoreToAdd = 0;
 
-    int score;
-    JLabel scoreboard;
+    private int score;
+    protected JLabel scoreboard;
 
-    LoopPlayer siren;
-    boolean mustReactivateSiren = false;
-    LoopPlayer pac6;
+    protected LoopPlayer siren;
+    private boolean mustReactivateSiren = false;
+    protected LoopPlayer pac6;
 
     public Point ghostBase;
 
     public int m_x;
     public int m_y;
 
-    MapData md_backup;
-    PacWindow windowParent;
+    protected MapData md_backup;
+    protected PacWindow windowParent;
 
     public PacBoard(JLabel scoreboard, MapData md, PacWindow pw){
         this.scoreboard = scoreboard;
@@ -88,26 +95,22 @@ public class PacBoard extends JPanel{
         ghosts = new ArrayList<>();
         teleports = new ArrayList<>();
 
-        //TODO : read food from mapData (Map 1)
-
-        if(!isCustom) {
+        if (!isCustom) {
             for (int i = 0; i < m_x; i++) {
                 for (int j = 0; j < m_y; j++) {
                     if (map[i][j] == 0)
                         foods.add(new Food(i, j));
                 }
             }
-        }else{
+        } else {
             foods = md.getFoodPositions();
         }
-
-
 
         pufoods = md.getPufoodPositions();
 
         ghosts = new ArrayList<>();
-        for(GhostData gd : md.getGhostsData()){
-            switch(gd.getType()) {
+        for (GhostData gd : md.getGhostsData()) {
+            switch (gd.getType()) {
                 case RED:
                     ghosts.add(new RedGhost(gd.getX(), gd.getY(), this));
                     break;
@@ -128,25 +131,27 @@ public class PacBoard extends JPanel{
 
         mapSegments = new Image[28];
         mapSegments[0] = null;
-        for(int ms=1;ms<28;ms++){
+        for (int ms = 1; ms < 28; ms++) {
             try {
-                mapSegments[ms] = ImageIO.read(this.getClass().getResource("resources/images/map segments/"+ms+".png"));
-            }catch(Exception e){}
+                mapSegments[ms] = ImageIO.read(this.getClass().getResource("/images/map segments/"+ms+".png"));
+            } catch (Exception e) {
+            }
         }
 
         pfoodImage = new Image[5];
-        for(int ms=0 ;ms<5;ms++){
+        for (int ms = 0; ms < 5; ms++) {
             try {
-                pfoodImage[ms] = ImageIO.read(this.getClass().getResource("resources/images/food/"+ms+".png"));
-            }catch(Exception e){}
+                pfoodImage[ms] = ImageIO.read(this.getClass().getResource("/images/food/"+ms+".png"));
+            } catch (Exception e) {
+            }
         }
-        try{
-            foodImage = ImageIO.read(this.getClass().getResource("resources/images/food.png"));
-            goImage = ImageIO.read(this.getClass().getResource("resources/images/gameover.png"));
-            vicImage = ImageIO.read(this.getClass().getResource("resources/images/victory.png"));
+        try {
+            foodImage = ImageIO.read(this.getClass().getResource("/images/food.png"));
+            goImage = ImageIO.read(this.getClass().getResource("/images/gameover.png"));
+            vicImage = ImageIO.read(this.getClass().getResource("/images/victory.png"));
             //pfoodImage = ImageIO.read(this.getClass().getResource("/images/pfood.png"));
-        }catch(Exception e){}
-
+        } catch (Exception e) {
+        }
 
         redrawAL = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -391,18 +396,18 @@ public class PacBoard extends JPanel{
 
 
     @Override
-    public void processEvent(AWTEvent ae){
+    public void processEvent(AWTEvent ae) {
 
-        if(ae.getID()==Messeges.UPDATE) {
+        if (ae.getID() == AWTEventStatusMessage.UPDATE) {
             update();
-        }else if(ae.getID()==Messeges.COLTEST) {
+        } else if (ae.getID() == AWTEventStatusMessage.COLTEST) {
             if (!isGameOver) {
                 collisionTest();
             }
-        }else if(ae.getID()==Messeges.RESET){
-            if(isGameOver)
+        } else if (ae.getID()== AWTEventStatusMessage.RESET) {
+            if (isGameOver)
                 restart();
-        }else {
+        } else {
             super.processEvent(ae);
         }
     }
@@ -427,8 +432,6 @@ public class PacBoard extends JPanel{
         ghosts = new ArrayList<>();
         teleports = new ArrayList<>();
 
-        //TODO : read food from mapData (Map 1)
-
         if(!isCustom) {
             for (int i = 0; i < m_x; i++) {
                 for (int j = 0; j < m_y; j++) {
@@ -439,8 +442,6 @@ public class PacBoard extends JPanel{
         }else{
             foods = md_backup.getFoodPositions();
         }
-
-
 
         pufoods = md_backup.getPufoodPositions();
 
@@ -462,8 +463,4 @@ public class PacBoard extends JPanel{
         teleports = md_backup.getTeleports();
         */
     }
-
-
-
-
 }
