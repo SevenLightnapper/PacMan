@@ -80,7 +80,8 @@ public class StartWindow extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: add game creation
+                PacWindow pw = new PacWindow();
+                //new PacWindow();
                 dispose();
             }
         });
@@ -90,6 +91,7 @@ public class StartWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO: add game customization
+                MapEditor me = new MapEditor();
                 dispose();
             }
         });

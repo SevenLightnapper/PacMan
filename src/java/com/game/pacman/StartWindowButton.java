@@ -13,12 +13,12 @@ import java.io.IOException;
 /**
  * @author SevenLightnapper
  *
- * This class makes custom buttons to showcase on the starting window
+ * @description This class makes custom buttons to showcase on the starting window
  * and monitors if any custom button has been pressed.
  * To make a button, you have to assign a value (name) to it,
  * when creating an object of this class.
- * In the constructor, the button will recieve it's name in the application's font,
- * it will also recieve a background color (yellow).
+ * In the constructor, the button will receive its name in the application's font,
+ * it will also receive a background color (yellow).
  * In the constructor, a mouse will be registered (a listener will be set).
  * When a mouse hovers over a custom button,
  * the said button will change color (orange-ish) to indicate that it's been captured.
