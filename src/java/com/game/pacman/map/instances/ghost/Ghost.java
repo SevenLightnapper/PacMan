@@ -1,7 +1,9 @@
 package com.game.pacman.map.instances.ghost;
 
-import com.game.pacman.BFSFinder;
+import com.game.pacman.utils.BFSFinder;
+import com.game.pacman.general.PacBoard;
 import com.game.pacman.map.MoveType;
+import com.game.pacman.utils.AWTEventStatusMessage;
 
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
@@ -27,11 +29,11 @@ public abstract class Ghost {
     ActionListener pendingAL;
 
     //Move Vars
-    Timer moveTimer;
+    public Timer moveTimer;
     ActionListener moveAL;
     public MoveType activeMove;
     protected boolean isStuck = true;
-    boolean isPending = false;
+    protected boolean isPending = false;
 
     Timer unWeakenTimer1;
     Timer unWeakenTimer2;
@@ -59,10 +61,10 @@ public abstract class Ghost {
     public Point pixelPosition;
     public Point logicalPosition;
 
-    Image[] ghostR;
-    Image[] ghostL;
-    Image[] ghostU;
-    Image[] ghostD;
+    protected Image[] ghostR;
+    protected Image[] ghostL;
+    protected Image[] ghostU;
+    protected Image[] ghostD;
 
     Image[] ghostW;
     Image[] ghostWW;
@@ -72,7 +74,7 @@ public abstract class Ghost {
     int ghostWeakDelay = 30;
     int ghostDeadDelay = 5;
 
-    BFSFinder baseReturner;
+    protected BFSFinder baseReturner;
 
     protected PacBoard parentBoard;
 
@@ -140,7 +142,7 @@ public abstract class Ghost {
                                 logicalPosition.y++;
                                 break;
                         }
-                        parentBoard.dispatchEvent(new ActionEvent(this,Messeges.UPDATE,null));
+                        parentBoard.dispatchEvent(new ActionEvent(this, AWTEventStatusMessage.UPDATE,null));
                     }
 
 
@@ -198,7 +200,7 @@ public abstract class Ghost {
                         break;
                 }
 
-                parentBoard.dispatchEvent(new ActionEvent(this,Messeges.COLTEST,null));
+                parentBoard.dispatchEvent(new ActionEvent(this, AWTEventStatusMessage.COLTEST,null));
             }
         };
         moveTimer = new Timer(ghostDelay,moveAL);
