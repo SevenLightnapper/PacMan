@@ -11,27 +11,27 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
  *
  * @description This class makes custom buttons to showcase on the starting window
- * and monitors if any custom button has been pressed.
+ * and monitors if any custom button has been pressed.<p>
  * To make a button, you have to assign a value (name) to it,
- * when creating an object of this class.
+ * when creating an object of this class.<p>
  * In the constructor, the button will receive its name in the application's font,
- * it will also receive a background color (yellow).
- * In the constructor, a mouse will be registered (a listener will be set).
+ * it will also receive a background color (yellow).<p>
+ * In the constructor, a mouse will be registered (a listener will be set).<p>
  * When a mouse hovers over a custom button,
  * the said button will change color (orange-ish) to indicate that it's been captured.
  */
 public class StartWindowButton extends JLabel implements MouseListener {
 
-    ActionListener myAL;
+    private ActionListener myAL;
 
     /**
      * @constructor
      * @param value contains the name of the button
      */
-    public StartWindowButton(String value){
+    public StartWindowButton(String value) {
         super(value); // assign button's value
         Font customFont;
         try {
@@ -46,32 +46,43 @@ public class StartWindowButton extends JLabel implements MouseListener {
         this.addMouseListener(this); // mouse registered
     }
 
+    /**
+     * ActionListener setter
+     * @param al
+     */
     public void addActionListener(ActionListener al) {
         myAL = al;
     }
 
+    /**
+     * when mouse clicks on button
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         myAL.actionPerformed(new ActionEvent(this,501,""));
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    /**
+     * sets color of button (foreground), when a mouse hovers over it
+     * @param e
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
         this.setForeground(new Color(243, 105, 66));
     }
 
+    /**
+     * sets color of button (foreground), when a mouse does not hover over it
+     * @param e
+     */
     @Override
     public void mouseExited(MouseEvent e) {
         this.setForeground(Color.yellow);
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
 }

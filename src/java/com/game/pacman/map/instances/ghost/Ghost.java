@@ -13,50 +13,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author SevenLightnapper
- * This class is somewhat of a deserializer for Ghosts' types.
+ * @author kamilla
+ * @description This class is a deserializer for ghost types.
+ * <p>
+ * Defines ghost's movement.
  */
 public abstract class Ghost {
-    //Anim Vars
+    // anim vars
     Timer animTimer;
     ActionListener animAL;
 
-    //Pending Vars
+    // pending vars
     Timer pendingTimer;
     ActionListener pendingAL;
 
-    //Move Vars
+    // move vars
     public Timer moveTimer;
     ActionListener moveAL;
     public MoveType activeMove;
     protected boolean isStuck = true;
     protected boolean isPending = false;
 
+    // weak vars
     Timer unWeakenTimer1;
     Timer unWeakenTimer2;
     ActionListener unweak1;
     ActionListener unweak2;
     int unweakBlinks;
-    boolean isWhite = false;
 
+    // is* flags
+    boolean isWhite = false;
     protected boolean isWeak = false;
     protected boolean isDead = false;
 
-    public boolean isWeak() {
-        return isWeak;
-    }
-
-    public boolean isDead() {
-        return isDead;
-    }
-
-    //Image[] pac;
-    Image ghostImg;
     int activeImage = 0;
-    int addFactor = 1;
 
     public Point pixelPosition;
     public Point logicalPosition;
@@ -78,56 +72,60 @@ public abstract class Ghost {
 
     protected PacBoard parentBoard;
 
+    /**
+     * @constructor this one is super long
+     * @param x position
+     * @param y position
+     * @param pb pacman board
+     * @param ghostDelay ghost delay
+     */
     public Ghost(int x, int y, PacBoard pb, int ghostDelay) {
 
-        logicalPosition = new Point(x,y);
-        pixelPosition = new Point(28*x,28*y);
-
+        logicalPosition = new Point(x, y);
+        pixelPosition = new Point(28 * x, 28 * y);
         parentBoard = pb;
-
         activeMove = MoveType.RIGHT;
-
         ghostNormalDelay = ghostDelay;
 
         loadImages();
 
-        //load weak Image
+        // load weak image
         ghostW = new Image[2];
         try {
-            ghostW[0] = ImageIO.read(this.getClass().getResource("/images/ghost/blue/1.png"));
-            ghostW[1] = ImageIO.read(this.getClass().getResource("/images/ghost/blue/3.png"));
+            ghostW[0] = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/images/ghost/blue/1.png")));
+            ghostW[1] = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/images/ghost/blue/3.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         ghostWW = new Image[2];
         try {
-            ghostWW[0] = ImageIO.read(this.getClass().getResource("/images/ghost/white/1.png"));
-            ghostWW[1] = ImageIO.read(this.getClass().getResource("/images/ghost/white/3.png"));
+            ghostWW[0] = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/images/ghost/white/1.png")));
+            ghostWW[1] = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/images/ghost/white/3.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            ghostEye = ImageIO.read(this.getClass().getResource("/images/eye.png"));
+            ghostEye = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/images/eye.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //animation timer
+        // animation timer
         animAL = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 activeImage = (activeImage + 1) % 2;
             }
         };
-        animTimer = new Timer(100,animAL);
+        animTimer = new Timer(100, animAL);
         animTimer.start();
 
         moveAL = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
 
-                if((pixelPosition.x % 28 == 0) && (pixelPosition.y % 28 == 0)){
-                    if(!isStuck) {
+                if ((pixelPosition.x % 28 == 0) && (pixelPosition.y % 28 == 0)) {
+                    if (!isStuck) {
                         switch (activeMove) {
                             case RIGHT:
                                 logicalPosition.x++;
@@ -145,7 +143,6 @@ public abstract class Ghost {
                         parentBoard.dispatchEvent(new ActionEvent(this, AWTEventStatusMessage.UPDATE,null));
                     }
 
-
                     activeMove = getMoveAI();
                     isStuck = true;
 
@@ -155,55 +152,62 @@ public abstract class Ghost {
                     //    activeMove = todoMove;
                     //    todoMove = MoveType.NONE;
                     //}
-                }else{
+                } else {
                     isStuck = false;
                     //animTimer.start();
                 }
-                // }
-                //TODO : fix ghost movements
-                switch(activeMove){
+
+                switch(activeMove) {
                     case RIGHT:
-                        if(pixelPosition.x >= (parentBoard.m_x-1) * 28){
+                        if (pixelPosition.x >= (parentBoard.m_x - 1) * 28) {
                             return;
                         }
-                        if((logicalPosition.x+1 < parentBoard.m_x) && (parentBoard.map[logicalPosition.x+1][logicalPosition.y]>0) && ((parentBoard.map[logicalPosition.x+1][logicalPosition.y]<26)||isPending)){
+                        if ((logicalPosition.x + 1 < parentBoard.m_x)
+                                && (parentBoard.map[logicalPosition.x + 1][logicalPosition.y] > 0)
+                                && ((parentBoard.map[logicalPosition.x + 1][logicalPosition.y] < 26) || isPending)) {
                             return;
                         }
-                        pixelPosition.x ++;
+                        pixelPosition.x++;
                         break;
                     case LEFT:
-                        if(pixelPosition.x <= 0){
+                        if (pixelPosition.x <= 0) {
                             return;
                         }
-                        if((logicalPosition.x-1 >= 0) && (parentBoard.map[logicalPosition.x-1][logicalPosition.y]>0) && ((parentBoard.map[logicalPosition.x-1][logicalPosition.y]<26)||isPending)){
+                        if ((logicalPosition.x - 1 >= 0)
+                                && (parentBoard.map[logicalPosition.x - 1][logicalPosition.y] > 0)
+                                && ((parentBoard.map[logicalPosition.x - 1][logicalPosition.y] < 26) || isPending)) {
                             return;
                         }
-                        pixelPosition.x --;
+                        pixelPosition.x--;
                         break;
                     case UP:
-                        if(pixelPosition.y <= 0){
+                        if (pixelPosition.y <= 0) {
                             return;
                         }
-                        if((logicalPosition.y-1 >= 0) && (parentBoard.map[logicalPosition.x][logicalPosition.y-1]>0) && ((parentBoard.map[logicalPosition.x][logicalPosition.y-1]<26)||isPending)){
+                        if ((logicalPosition.y - 1 >= 0)
+                                && (parentBoard.map[logicalPosition.x][logicalPosition.y - 1] > 0)
+                                && ((parentBoard.map[logicalPosition.x][logicalPosition.y - 1] < 26) || isPending)) {
                             return;
                         }
                         pixelPosition.y--;
                         break;
                     case DOWN:
-                        if(pixelPosition.y >= (parentBoard.m_y-1) * 28){
+                        if (pixelPosition.y >= (parentBoard.m_y-1) * 28) {
                             return;
                         }
-                        if((logicalPosition.y+1 < parentBoard.m_y) && (parentBoard.map[logicalPosition.x][logicalPosition.y+1]>0) && ((parentBoard.map[logicalPosition.x][logicalPosition.y+1]<26)||isPending)){
+                        if ((logicalPosition.y + 1 < parentBoard.m_y)
+                                && (parentBoard.map[logicalPosition.x][logicalPosition.y + 1] > 0)
+                                && ((parentBoard.map[logicalPosition.x][logicalPosition.y + 1] < 26) || isPending)) {
                             return;
                         }
-                        pixelPosition.y ++;
+                        pixelPosition.y++;
                         break;
                 }
 
                 parentBoard.dispatchEvent(new ActionEvent(this, AWTEventStatusMessage.COLTEST,null));
             }
         };
-        moveTimer = new Timer(ghostDelay,moveAL);
+        moveTimer = new Timer(ghostDelay, moveAL);
         moveTimer.start();
 
         unweak1 = new ActionListener() {
@@ -213,25 +217,24 @@ public abstract class Ghost {
                 unWeakenTimer1.stop();
             }
         };
-        unWeakenTimer1 = new Timer(7000,unweak1);
+        unWeakenTimer1 = new Timer(7000, unweak1);
 
         unweak2 = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(unweakBlinks == 10){
+                if (unweakBlinks == 10) {
                     unweaken();
                     unWeakenTimer2.stop();
                 }
-                if(unweakBlinks % 2 == 0){
+                if (unweakBlinks % 2 == 0) {
                     isWhite = true;
-                }else{
+                } else {
                     isWhite = false;
                 }
                 unweakBlinks++;
             }
         };
-        unWeakenTimer2 = new Timer(250,unweak2);
-
+        unWeakenTimer2 = new Timer(250, unweak2);
 
         pendingAL = new ActionListener() {
             @Override
@@ -240,39 +243,61 @@ public abstract class Ghost {
                 pendingTimer.stop();
             }
         };
-        pendingTimer = new Timer(7000,pendingAL);
+        pendingTimer = new Timer(7000, pendingAL);
 
         baseReturner = new BFSFinder(pb);
         //start AI
         activeMove = getMoveAI();
-
     }
 
-    //load Images from Resource
+    /**
+     * is ghost weak
+     * @return true | false
+     */
+    public boolean isWeak() {
+        return isWeak;
+    }
+
+    /**
+     * is ghost dead
+     * @return true | false
+     */
+    public boolean isDead() {
+        return isDead;
+    }
+
+    /**
+     * load images from resources
+     */
     public abstract void loadImages();
 
-    //get Move Based on AI
+    /**
+     * get move based on AI
+     * @return AI move
+     * @see MoveType
+     */
     public abstract MoveType getMoveAI();
 
-    //get possible Moves
-    public ArrayList<MoveType> getPossibleMoves(){
+    /**
+     * get possible moves
+     * @return list of move options
+     * @see MoveType
+     */
+    public ArrayList<MoveType> getPossibleMoves() {
         ArrayList<MoveType> possibleMoves = new ArrayList<>();
 
-        if(logicalPosition.x >= 0 && logicalPosition.x < parentBoard.m_x-1 && logicalPosition.y >= 0 && logicalPosition.y < parentBoard.m_y-1 ) {
-            //System.out.println(this.toString());
+        if(logicalPosition.x >= 0 && logicalPosition.x < parentBoard.m_x - 1
+                && logicalPosition.y >= 0 && logicalPosition.y < parentBoard.m_y - 1) {
             if (!(parentBoard.map[logicalPosition.x + 1][logicalPosition.y] > 0)) {
                 possibleMoves.add(MoveType.RIGHT);
             }
-
             if (!(parentBoard.map[logicalPosition.x - 1][logicalPosition.y] > 0)) {
                 possibleMoves.add(MoveType.LEFT);
             }
-
-            if(!(parentBoard.map[logicalPosition.x][logicalPosition.y-1]>0)){
+            if (!(parentBoard.map[logicalPosition.x][logicalPosition.y - 1] > 0)) {
                 possibleMoves.add(MoveType.UP);
             }
-
-            if(!(parentBoard.map[logicalPosition.x][logicalPosition.y+1]>0)){
+            if (!(parentBoard.map[logicalPosition.x][logicalPosition.y + 1] > 0)) {
                 possibleMoves.add(MoveType.DOWN);
             }
         }
@@ -280,8 +305,13 @@ public abstract class Ghost {
         return possibleMoves;
     }
 
-    public Image getGhostImage(){
-        if(!isDead) {
+    /**
+     * ghost image getter
+     * @return ghost image
+     * @see Image
+     */
+    public Image getGhostImage() {
+        if (!isDead) {
             if (!isWeak) {
                 switch (activeMove) {
                     case RIGHT:
@@ -301,13 +331,15 @@ public abstract class Ghost {
                     return ghostW[activeImage];
                 }
             }
-        }else{
+        } else {
             return ghostEye;
         }
     }
 
-
-    public void weaken(){
+    /**
+     * make ghosts weak
+     */
+    public void weaken() {
         isWeak = true;
         moveTimer.setDelay(ghostWeakDelay);
         unweakBlinks = 0;
@@ -315,27 +347,36 @@ public abstract class Ghost {
         unWeakenTimer1.start();
     }
 
+    /**
+     * make ghosts strong
+     */
     public void unweaken(){
         isWeak = false;
         moveTimer.setDelay(ghostNormalDelay);
     }
 
-    public void die(){
+    /**
+     * kill ghost
+     */
+    public void die() {
         isDead = true;
         moveTimer.setDelay(ghostDeadDelay);
     }
 
-    public void undie(){
-        //Shift Left Or Right
+    /**
+     * resurrect ghost
+     */
+    public void undie() {
+        // shift left or right
         int r = ThreadLocalRandom.current().nextInt(3);
         if (r == 0) {
-            //Do nothing
+            // do nothing
         }
-        if(r==1){
+        if (r == 1) {
             logicalPosition.x += 1;
             pixelPosition.x += 28;
         }
-        if(r==2){
+        if (r == 2) {
             logicalPosition.x -= 1;
             pixelPosition.x -= 28;
         }

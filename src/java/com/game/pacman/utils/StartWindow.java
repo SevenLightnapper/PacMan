@@ -19,17 +19,21 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
  *
+ * @description
  * This class generates the starting window of the application.
- *
+ * <p>
  * Provides two options:
- * 1. Start the game
- * 2. Customize the game
- *
+ * <ul>
+ *     1. Start the game<p>
+ *     2. Customize the game
+ * </ul>
  * First option starts the game on an already fixed gaming field.
+ * <p>
  * Second option lets you create a gaming field.
  */
 public class StartWindow extends JFrame {
@@ -48,7 +52,7 @@ public class StartWindow extends JFrame {
         // setting the logo image of the application
         ImageIcon logo = new ImageIcon();
         try {
-            logo = new ImageIcon(ImageIO.read(this.getClass().getResource("/images/pacman_logo.png")));
+            logo = new ImageIcon(ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/images/pacman_logo.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +60,7 @@ public class StartWindow extends JFrame {
         // register application's font
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("/fonts/crackman.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass().getResourceAsStream("/fonts/crackman.ttf"))));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
@@ -107,8 +111,8 @@ public class StartWindow extends JFrame {
 
         // console output
         System.out.print('\n');
-        System.out.println("PacMan v1.0.5   Developed By : SevenLightnapper");
-        System.out.println("-----------------------------------------------");
+        System.out.println("PacMan v2.0.0   Developed By : kamilla");
+        System.out.println("--------------------------------------");
 
         // make the starting window visible
         setVisible(true);

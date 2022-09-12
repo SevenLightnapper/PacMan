@@ -3,7 +3,7 @@ package com.game.pacman.map.instances.food;
 import java.awt.Point;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
  * @description Class that describes food.
  * Food's location, to be precise.
  */

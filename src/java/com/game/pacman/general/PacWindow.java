@@ -11,43 +11,31 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * @author kamilla
+ * @description Sets the application's game window. Adjusts the map.
+ */
 public class PacWindow extends JFrame {
 
     public PacWindow(){
-        setTitle("PacMan v1.0.5");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("PacMan v2.0.0"); // window title
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // exit by [x]
         setLayout(new BorderLayout());
-        getContentPane().setBackground(Color.black);
+        getContentPane().setBackground(Color.black); // bg color black
 
-        setSize(794,884);
-        setLocationRelativeTo(null);
+        setSize(794,884); // window margins
+        setLocationRelativeTo(null); // middle of screen
 
-        JLabel scoreboard = new JLabel("    Score : 0");
-        scoreboard.setForeground(new Color(255, 243, 36));
+        JLabel scoreboard = new JLabel("    Score : 0"); // scoreboard (low left corner)
+        scoreboard.setForeground(new Color(255, 243, 36)); // sb color
 
-        MapData map1 = getMapFromResource("/maps/map1_c.txt");
-        adjustMap(map1);
+        MapData map1 = getMapFromResource("/maps/map1_c.txt"); // read map from file
+        adjustMap(map1); // adjust map
 
-        /*map1.getTeleports().add(new TeleportTunnel(-1,14,27,14,MoveType.LEFT));
-        map1.getTeleports().add(new TeleportTunnel(27,14,-1,14,MoveType.RIGHT));
-        map1.getGhostsData().add(new GhostData(12,17,ghostType.RED));
-        map1.getGhostsData().add(new GhostData(17,14,ghostType.RED));
-        map1.getGhostsData().add(new GhostData(17,10,ghostType.PINK));
-        map1.getGhostsData().add(new GhostData(5,27,ghostType.CYAN));
-        map1.getGhostsData().add(new GhostData(3,5,ghostType.PINK));
-        map1.getGhostsData().add(new GhostData(20,5,ghostType.CYAN));
-        map1.getPufoodPositions().add(new PowerUpFood(12,14,0));
-        map1.getPufoodPositions().add(new PowerUpFood(25,27,3));
-        map1.getPufoodPositions().add(new PowerUpFood(24,27,2));
-        map1.getPufoodPositions().add(new PowerUpFood(23,27,1));
-        map1.getPufoodPositions().add(new PowerUpFood(22,27,4));
-        map1.getPufoodPositions().add(new PowerUpFood(21,27,0));
-        map1.setGhostBasePosition(new Point(12,14));*/
-
-
-        PacBoard pb = new PacBoard(scoreboard,map1,this);
+        PacBoard pb = new PacBoard(scoreboard, map1,this); // make pac board
 
         pb.setBorder(new CompoundBorder(new EmptyBorder(10,10,10,10),new LineBorder(Color.BLUE)));
         addKeyListener(pb.pacman);
@@ -57,21 +45,24 @@ public class PacWindow extends JFrame {
         setVisible(true);
     }
 
-    public PacWindow(MapData md){
-        setTitle("PacMan v1.0.5");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    /**
+     * @constructor
+     * @param md map info {@link MapData}
+     */
+    public PacWindow(MapData md) {
+        setTitle("PacMan v2.0.0"); // window title
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // exit by [x]
         setLayout(new BorderLayout());
-        getContentPane().setBackground(Color.black);
+        getContentPane().setBackground(Color.black); // bg color black
 
-        setSize(794,884);
-        setLocationRelativeTo(null);
+        setSize(794,884); // window margins
+        setLocationRelativeTo(null); // middle of screen
 
-        JLabel scoreboard = new JLabel("    Score : 0");
-        scoreboard.setForeground(new Color(255, 243, 36));
+        JLabel scoreboard = new JLabel("    Score : 0"); // scoreboard
+        scoreboard.setForeground(new Color(255, 243, 36)); // sb color
 
-        //int[][] mapLoaded = loadMap(27,29,"/maps/map1.txt");
-        adjustMap(md);
-        PacBoard pb = new PacBoard(scoreboard,md,this);
+        adjustMap(md); // adjust map
+        PacBoard pb = new PacBoard(scoreboard,md,this); // create pac board
         pb.setBorder(new CompoundBorder(new EmptyBorder(10,10,10,10),new LineBorder(Color.BLUE)));
         addKeyListener(pb.pacman);
 
@@ -80,51 +71,45 @@ public class PacWindow extends JFrame {
         setVisible(true);
     }
 
-
-    public int[][] loadMap(int mx,int my,String relPath){
-        try {
-            Scanner scn = new Scanner(this.getClass().getResourceAsStream(relPath));
-            int[][] map;
-            map = new int[mx][my];
-            for(int y=0;y<my;y++){
-                for(int x=0;x<mx;x++){
-                    map[x][y]=scn.nextInt();
-                }
-            }
-            return map;
-        }catch(Exception e){
-            System.err.println("Error reading map file!!!");
-        }
-        return null;
-    }
-
-    public MapData getMapFromResource(String relPath){
+    /**
+     * convert map from .txt file to {@link MapData}
+     * @param relPath path to map file
+     * @see maps
+     * @return converted map {@link MapData}
+     * @see MapEditor#compileMap(String mapStr)
+     */
+    public MapData getMapFromResource(String relPath) {
         String mapStr = "";
         try {
-            Scanner scn = new Scanner(this.getClass().getResourceAsStream(relPath));
+            Scanner scn = new Scanner(Objects.requireNonNull(this.getClass().getResourceAsStream(relPath)));
             StringBuilder sb = new StringBuilder();
             String line;
-            while(scn.hasNextLine()){
+            while (scn.hasNextLine()) {
                 line = scn.nextLine();
                 sb.append(line).append('\n');
             }
             mapStr = sb.toString();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println("Error reading map file!!!");
         }
-        if("".equals(mapStr)){
+        if ("".equals(mapStr)) {
             System.err.println("Map is empty!!!");
         }
         return MapEditor.compileMap(mapStr);
     }
 
-    //Dynamically Generate Map Segments
-    public void adjustMap(MapData mapd){
-        int[][] map = mapd.getMap();
-        int mx=mapd.getX();
-        int my=mapd.getY();
-        for(int y=0;y<my;y++){
-            for(int x=0;x<mx;x++){
+    /**
+     * Dynamically generate map segments
+     * @see images.map_segments
+     * @param mapData map info {@link MapData}
+     * @see MapData#setMap(int[][] map)
+     */
+    public void adjustMap(MapData mapData) {
+        int[][] map = mapData.getMap();
+        int mx = mapData.getX();
+        int my = mapData.getY();
+        for (int y = 0; y < my; y++) {
+            for (int x = 0; x < mx; x++) {
                 boolean l = false;
                 boolean r = false;
                 boolean t = false;
@@ -134,42 +119,42 @@ public class PacWindow extends JFrame {
                 boolean bl = false;
                 boolean br = false;
 
-                if(map[x][y]>0 && map[x][y]<26) {
+                if (map[x][y] > 0 && map[x][y] < 26) {
                     int mustSet = 0;
-                    //LEFT
-                    if (x > 0 && map[x - 1][y] > 0 && map[x-1][y]<26) {
+                    // LEFT
+                    if (x > 0 && map[x - 1][y] > 0 && map[x - 1][y] < 26) {
                         l = true;
                     }
-                    //RIGHT
-                    if (x < mx - 1 && map[x + 1][y] > 0 && map[x+1][y]<26) {
+                    // RIGHT
+                    if (x < mx - 1 && map[x + 1][y] > 0 && map[x + 1][y] < 26) {
                         r = true;
                     }
-                    //TOP
-                    if (y > 0 && map[x][y - 1] > 0 && map[x][y-1]<26) {
+                    // TOP
+                    if (y > 0 && map[x][y - 1] > 0 && map[x][y - 1] < 26) {
                         t = true;
                     }
-                    //Bottom
-                    if (y < my - 1 && map[x][y + 1] > 0 && map[x][y+1]<26) {
+                    // Bottom
+                    if (y < my - 1 && map[x][y + 1] > 0 && map[x][y + 1] < 26) {
                         b = true;
                     }
-                    //TOP LEFT
-                    if (x > 0 && y > 0 && map[x - 1][y - 1] > 0 && map[x-1][y-1]<26) {
+                    // TOP LEFT
+                    if (x > 0 && y > 0 && map[x - 1][y - 1] > 0 && map[x - 1][y - 1] < 26) {
                         tl = true;
                     }
-                    //TOP RIGHT
-                    if (x < mx - 1 && y > 0 && map[x + 1][y - 1] > 0 && map[x+1][y-1]<26) {
+                    // TOP RIGHT
+                    if (x < mx - 1 && y > 0 && map[x + 1][y - 1] > 0 && map[x + 1][y - 1] < 26) {
                         tr = true;
                     }
-                    //Bottom LEFT
-                    if (x > 0 && y < my - 1 && map[x - 1][y + 1] > 0 && map[x-1][y+1]<26) {
+                    // Bottom LEFT
+                    if (x > 0 && y < my - 1 && map[x - 1][y + 1] > 0 && map[x - 1][y + 1] < 26) {
                         bl = true;
                     }
-                    //Bottom RIGHT
-                    if (x < mx - 1 && y < my - 1 && map[x + 1][y + 1] > 0 && map[x+1][y+1]<26) {
+                    // Bottom RIGHT
+                    if (x < mx - 1 && y < my - 1 && map[x + 1][y + 1] > 0 && map[x + 1][y + 1] < 26) {
                         br = true;
                     }
 
-                    //Decide Image to View
+                    // decide image to set
                     if (!r && !l && !t && !b) {
                         mustSet = 23;
                     }
@@ -249,11 +234,10 @@ public class PacWindow extends JFrame {
                     //System.out.println("MAP SEGMENT : " + mustSet);
                     map[x][y] = mustSet;
                 }
-                mapd.setMap(map);
+                mapData.setMap(map);
             }
         }
         System.out.println("Map adjusted! OK!!!");
     }
-
 
 }

@@ -1,15 +1,18 @@
 package com.game.pacman.map.instances.ghost;
 
 /**
- * @author SevenLightnapper
- * @description This class describes the ghosts.
+ * @author kamilla
+ * @description This class describes ghosts:
+ * <p>
+ *     getters and setters plus a constructor.
+ * </p>
  */
 public class GhostData {
     private int x;
     private int y;
     private GhostType type;
 
-    public GhostData(int x, int y, GhostType type){
+    public GhostData(int x, int y, GhostType type) {
         this.x = x;
         this.y = y;
         this.type = type;

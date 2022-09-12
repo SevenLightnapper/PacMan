@@ -7,13 +7,18 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
+ * @description plays sounds in a loop
  */
 public class LoopPlayer {
 
     Clip clip;
     AudioInputStream inputStream;
 
+    /**
+     * @constructor
+     * @param soundName which sound to loop
+     */
     public LoopPlayer(String soundName){
         try {
             clip = AudioSystem.getClip();
@@ -25,6 +30,9 @@ public class LoopPlayer {
         }
     }
 
+    /**
+     * start the loop
+     */
     public void start(){
         try {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -33,6 +41,9 @@ public class LoopPlayer {
         }
     }
 
+    /**
+     * end the loop
+     */
     public void stop(){
         try {
             clip.stop();

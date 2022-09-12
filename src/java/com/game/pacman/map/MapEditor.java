@@ -23,21 +23,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @author kamilla
+ * @description This class makes custom gaming field
+ */
 public class MapEditor extends JFrame {
 
+    /**
+     * @constructor
+     */
     public MapEditor(){
-        setSize(650,400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(650,400); // window size
+        setLocationRelativeTo(null); // middle of screen
+        setDefaultCloseOperation(EXIT_ON_CLOSE); // exit by clicking [X]
 
-        getContentPane().setBackground(Color.black);
+        getContentPane().setBackground(Color.black); // background black
 
-        JPanel sideBar = new JPanel();
+        JPanel sideBar = new JPanel(); // make sidebar
         sideBar.setLayout(new BorderLayout());
         sideBar.setBackground(Color.black);
-        JPanel ghostSelection = new JPanel();
-        ghostSelection.setLayout(new BoxLayout(ghostSelection,BoxLayout.Y_AXIS));
+        JPanel ghostSelection = new JPanel(); // make list of options
+        ghostSelection.setLayout(new BoxLayout(ghostSelection, BoxLayout.Y_AXIS));
         ghostSelection.setBackground(Color.black);
+
+        // options
         JLabel l0 = new JLabel("= : Blank Space (without Food)");
         JLabel l1 = new JLabel("_ : Blank Space (with Food)");
         JLabel l2 = new JLabel("X : Wall");
@@ -48,8 +57,8 @@ public class MapEditor extends JFrame {
         JLabel l7 = new JLabel("3 : Cyan Ghost (Patrol)");
         JLabel l8 = new JLabel("F : Fruit");
         JLabel l9 = new JLabel("B : Ghost Base");
-        //JLabel l4 = new JLabel("1 : Red Ghost (Chaser)");
 
+        // options' color
         l0.setForeground(Color.yellow);
         l1.setForeground(Color.yellow);
         l2.setForeground(Color.yellow);
@@ -61,6 +70,7 @@ public class MapEditor extends JFrame {
         l8.setForeground(Color.yellow);
         l9.setForeground(Color.yellow);
 
+        // add options to list
         ghostSelection.add(l0);
         ghostSelection.add(l1);
         ghostSelection.add(l2);
@@ -73,10 +83,10 @@ public class MapEditor extends JFrame {
         ghostSelection.add(l9);
 
         setLayout(new BorderLayout());
-        sideBar.add(ghostSelection,BorderLayout.NORTH);
-        getContentPane().add(sideBar,BorderLayout.EAST);
+        sideBar.add(ghostSelection, BorderLayout.NORTH); // north part of sidebar
+        getContentPane().add(sideBar, BorderLayout.EAST); // sidebar east
 
-        JTextArea ta = new JTextArea();
+        JTextArea ta = new JTextArea(); // text area (editor)
         ta.setBackground(Color.black);
         ta.setForeground(Color.yellow);
         ta.setText("XXXXXXXXXX\n"
@@ -87,7 +97,7 @@ public class MapEditor extends JFrame {
         ta.setBorder(new CompoundBorder(new CompoundBorder(new EmptyBorder(20,10,20,10),new LineBorder(Color.yellow)),new EmptyBorder(10,10,10,10)));
         getContentPane().add(ta);
 
-
+        // make start button
         StartWindowButton startButton = new StartWindowButton("Start Game");
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -96,13 +106,17 @@ public class MapEditor extends JFrame {
             }
         });
         sideBar.add(startButton,BorderLayout.SOUTH);
-        //setLayout(new Grid);
 
+        // make visible
         setVisible(true);
     }
 
-    //Resolve Map
-    public static MapData compileMap(String input){
+    /**
+     * resolve (compile) map
+     * @param input map in text (String) format
+     * @return compiled custom map (MapData)
+     */
+    public static MapData compileMap(String input) {
         int mx = input.indexOf('\n');
         int my = StringHelper.countLines(input);
         System.out.println("Making Map " + mx + "x" + my);
@@ -111,7 +125,7 @@ public class MapEditor extends JFrame {
         customMap.setCustom(true);
         int[][] map = new int[mx][my];
 
-        //Pass Map As Argument
+        // fill map instances accordingly
         int i = 0;
         int j = 0;
         for (char c : input.toCharArray()) {
@@ -164,8 +178,8 @@ public class MapEditor extends JFrame {
         }
 
         //Print map array
-        /*for(int ii=0;ii<my;ii++){
-            for(int jj=0;jj<mx;jj++){
+        /*for (int ii = 0; ii < my; ii++) {
+            for (int jj = 0; jj < mx; jj++) {
                 System.out.print(map[jj][ii] + " ");
             }
             System.out.print('\n');
@@ -175,7 +189,5 @@ public class MapEditor extends JFrame {
         customMap.setCustom(true);
         System.out.println("Map read OK!!!");
         return customMap;
-        //new PacWindow(customMap);
     }
-
 }

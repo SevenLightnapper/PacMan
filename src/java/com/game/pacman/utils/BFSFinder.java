@@ -6,7 +6,7 @@ import com.game.pacman.map.MoveType;
 import java.awt.Point;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
  *
  * @description This class finds path between two Maze Points using Breadth-First Search (BFS)
  *
@@ -14,9 +14,9 @@ import java.awt.Point;
  */
 public class BFSFinder {
 
-    int[][] map;
-    int mx;
-    int my;
+    private final int[][] map;
+    private final int mx;
+    private final int my;
 
     public BFSFinder(PacBoard pb){
         this.mx = pb.m_x;
@@ -34,7 +34,11 @@ public class BFSFinder {
         }
     }
 
-    private class MazeCell {
+    /**
+     * @author kamilla
+     * @description describes a maze's cell
+     */
+    private static class MazeCell {
         int x;
         int y;
         boolean isVisited;
@@ -42,7 +46,7 @@ public class BFSFinder {
         public MazeCell(int x, int y) {
             this.x = x;
             this.y = y;
-            isVisited =false;
+            isVisited = false;
         }
 
         public String toString() {
@@ -50,12 +54,12 @@ public class BFSFinder {
         }
     }
 
-    private boolean isValid(int i,int j,boolean[][] markMat) {
+    private boolean isValid(int i, int j, boolean[][] markMat) {
         return (i >= 0 && i < mx && j >= 0 && j < my && map[i][j] == 0 && !markMat[i][j]);
     }
 
     //Construct Parentship LinkedList
-    public MoveType getMove(int x, int y,int tx,int ty) {
+    public MoveType getMove(int x, int y, int tx, int ty) {
 
         //already reached
         if (x == tx && y == ty) {
@@ -123,8 +127,6 @@ public class BFSFinder {
             }
         }
 
-
-        //MazeCell t = mazeCellTable[tx][ty];
         int ttx = tx;
         int tty = ty;
         MazeCell t = mazeCellTable[ttx][tty];
@@ -137,6 +139,7 @@ public class BFSFinder {
             t = mazeCellTable[ttx][tty];
         }
 
+        assert tl != null;
         if (x == tl.x - 1 && y == tl.y) {
             return MoveType.RIGHT;
         }

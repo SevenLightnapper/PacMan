@@ -3,7 +3,7 @@ package com.game.pacman.map.instances.food;
 import java.awt.Point;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
  * @description Position of evolved (depending on its type) food.
  */
 public class PowerUpFood {

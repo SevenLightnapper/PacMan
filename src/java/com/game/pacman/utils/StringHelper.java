@@ -1,7 +1,8 @@
 package com.game.pacman.utils;
 
 /**
- * @author SevenLightnapper
+ * @author kamilla
+ * @description count lines by regex of 'new line' (\r\n|\r|\n)
  */
 public class StringHelper {
     public static int countLines(String str){
