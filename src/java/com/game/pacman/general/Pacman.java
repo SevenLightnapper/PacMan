@@ -218,27 +218,27 @@ public class Pacman implements KeyListener {
     /**
      * handle arrow keys
      * @param ke {@link KeyEvent}
+     * @see <a href="https://spec-zone.ru/RU/Java/Docs/8/api/constant-values.html#java.awt.event.KeyEvent.VK_N">KeyEvent key codes</a>
      */
     @Override
     public void keyPressed(KeyEvent ke) {
         switch (ke.getKeyCode()) {
-            case 37:
+            case 37: // VK_LEFT
                 todoMove = MoveType.LEFT;
                 break;
-            case 38:
+            case 38: // VK_UP
                 todoMove = MoveType.UP;
                 break;
-            case 39:
+            case 39: // VK_RIGHT
                 todoMove = MoveType.RIGHT;
                 break;
-            case 40:
+            case 40: // VK_DOWN
                 todoMove = MoveType.DOWN;
                 break;
-            case 82:
+            case 82: // VK_R
                 parentBoard.dispatchEvent(new ActionEvent(this, AWTEventStatusMessage.RESET,null));
                 break;
         }
-        //System.out.println(ke.getKeyCode());
     }
 
 }
