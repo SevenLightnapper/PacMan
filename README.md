@@ -32,7 +32,7 @@ There you may choose to play on the default board or to customise it.
   - to restart the game <kbd>R</kbd>
 
 ### Additional Information
-Author of the project [kamilla](https://github.com/SevenLightnapper)
+Author of the project [Seven Lightnapper](https://github.com/SevenLightnapper)
 
 Source code location [PacMan](https://github.com/SevenLightnapper/PacMan)
 
